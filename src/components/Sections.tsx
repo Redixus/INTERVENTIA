@@ -1,9 +1,14 @@
-import { MessageCircle, ArrowRight, Clock, CheckCircle2, MapPin, Euro, Phone, Shield, Award } from 'lucide-react';
+import { MessageCircle, ArrowRight, Clock, CheckCircle2, MapPin, Euro, Award } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import { trackLead } from '../lib/supabase';
 
+// Import shield images as ES modules (required for Vite production builds)
+import rongeursImg from '../assets/shields/rongeurs.svg';
+import insectesRampantsImg from '../assets/shields/insectes-rampants.svg';
+import insectesVolantsImg from '../assets/shields/insectes-volants.svg';
+import autresNuisiblesImg from '../assets/shields/autres-nuisibles.svg';
+
 const WHATSAPP = '+32466274251';
-const PHONE = '+32 2 123 45 67';
 
 // ============================================
 // TRUST STRIP - Below Hero
@@ -12,22 +17,37 @@ export function TrustStrip() {
   const { language } = useLanguage();
   
   const items = [
-    { icon: Clock, label: language === 'fr' ? 'Intervention 24-48h' : 'Interventie 24-48u', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { icon: CheckCircle2, label: language === 'fr' ? 'Experts certifiés' : 'Gecertificeerde experts', color: 'text-amber-600', bg: 'bg-amber-50' },
-    { icon: Euro, label: language === 'fr' ? 'Prix fixe transparent' : 'Transparante vaste prijs', color: 'text-blue-600', bg: 'bg-blue-50' },
-    { icon: MapPin, label: language === 'fr' ? 'Toute la Belgique' : 'Heel België', color: 'text-teal-600', bg: 'bg-teal-50' },
+    { icon: Clock, label: language === 'fr' ? 'Intervention 24-48h' : 'Interventie 24-48u', value: '24h', gradient: 'from-emerald-500 to-teal-500' },
+    { icon: CheckCircle2, label: language === 'fr' ? 'Experts certifiés' : 'Gecertificeerde experts', value: '100%', gradient: 'from-amber-500 to-orange-500' },
+    { icon: Euro, label: language === 'fr' ? 'Prix fixe' : 'Vaste prijs', value: '€', gradient: 'from-blue-500 to-indigo-500' },
+    { icon: MapPin, label: language === 'fr' ? 'Toute la Belgique' : 'Heel België', value: 'BE', gradient: 'from-purple-500 to-pink-500' },
   ];
 
   return (
-    <section className="relative bg-gradient-to-r from-slate-50 via-white to-slate-50 py-5 border-y border-slate-100">
-      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
+    <section className="relative bg-[#FAFAF8] py-12 overflow-hidden">
+      {/* Subtle gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/50 to-transparent" />
+      
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {items.map((item, i) => (
-            <div key={i} className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white shadow-sm border border-slate-100 hover:shadow-md hover:scale-105 transition-all duration-200 cursor-default">
-              <div className={`${item.bg} p-1.5 rounded-full`}>
-                <item.icon className={`w-4 h-4 ${item.color}`} strokeWidth={2} />
+            <div 
+              key={i} 
+              className="group relative bg-white rounded-2xl p-5 shadow-lg shadow-slate-200/50 border border-slate-100 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-default overflow-hidden"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
+              {/* Gradient accent bar */}
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${item.gradient}`} />
+              
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                  <item.icon className="w-6 h-6 text-white" strokeWidth={2} />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">{item.value}</div>
+                  <div className="text-sm font-semibold text-slate-800">{item.label}</div>
+                </div>
               </div>
-              <span className="text-sm font-medium text-slate-700">{item.label}</span>
             </div>
           ))}
         </div>
@@ -37,7 +57,7 @@ export function TrustStrip() {
 }
 
 // ============================================
-// CATEGORIES - Shield containers
+// CATEGORIES - Premium card grid
 // ============================================
 export function Categories() {
   const { language } = useLanguage();
@@ -46,92 +66,106 @@ export function Categories() {
     { 
       fr: { name: 'Rongeurs', sub: 'Rats, souris, mulots' },
       nl: { name: 'Knaagdieren', sub: 'Ratten, muizen' },
-      image: '/src/assets/shields/rongeurs.svg'
+      image: rongeursImg,
+      gradient: 'from-amber-500 to-orange-600',
+      emoji: '🐀'
     },
     { 
       fr: { name: 'Insectes rampants', sub: 'Cafards, punaises, fourmis' },
       nl: { name: 'Kruipende insecten', sub: 'Kakkerlakken, bedwantsen' },
-      image: '/src/assets/shields/insectes-rampants.svg'
+      image: insectesRampantsImg,
+      gradient: 'from-red-500 to-rose-600',
+      emoji: '🪳'
     },
     { 
       fr: { name: 'Insectes volants', sub: 'Guêpes, frelons, mouches' },
       nl: { name: 'Vliegende insecten', sub: 'Wespen, horzels, vliegen' },
-      image: '/src/assets/shields/insectes-volants.svg'
+      image: insectesVolantsImg,
+      gradient: 'from-yellow-500 to-amber-600',
+      emoji: '🐝'
     },
     { 
       fr: { name: 'Autres nuisibles', sub: 'Pigeons, taupes, etc.' },
       nl: { name: 'Andere ongedierte', sub: 'Duiven, mollen, enz.' },
-      image: '/src/assets/shields/autres-nuisibles.svg'
+      image: autresNuisiblesImg,
+      gradient: 'from-slate-500 to-slate-700',
+      emoji: '🐦'
     },
   ];
 
   return (
-    <section className="relative bg-[#F5F3EF] py-20 overflow-hidden">
-      {/* Arc pattern background */}
-      <div className="absolute inset-0 opacity-[0.04]">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="arcPattern" width="80" height="80" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 Q 40 40 80 40" fill="none" stroke="#475569" strokeWidth="0.5" />
-              <path d="M 0 40 Q 40 40 40 80" fill="none" stroke="#475569" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#arcPattern)" />
-        </svg>
+    <section className="relative bg-gradient-to-b from-[#FAFAF8] to-white py-24 overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-100/50 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative w-full max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
-        {/* Section title */}
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="text-slate-900 font-bold tracking-tight mb-4" style={{
-            fontSize: 'clamp(1.75rem, 3vw, 2.5rem)'
-          }}>
-            {language === 'fr' ? 'Nos catégories d\'intervention' : 'Onze interventiecategorieën'}
+          <span className="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 text-sm font-bold rounded-full mb-4">
+            {language === 'fr' ? 'NOS SPÉCIALITÉS' : 'ONZE SPECIALITEITEN'}
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-4">
+            {language === 'fr' ? 'Quel nuisible ?' : 'Welk ongedierte?'}
           </h2>
-          <p className="text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
             {language === 'fr' 
-              ? 'Sélectionnez le type de nuisible pour une intervention ciblée et efficace.'
-              : 'Selecteer het type ongedierte voor een gerichte en effectieve interventie.'}
+              ? 'Cliquez sur votre problème pour une intervention ciblée'
+              : 'Klik op uw probleem voor een gerichte interventie'}
           </p>
         </div>
 
-        {/* Shield grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        {/* Category cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {categories.map((cat, i) => (
             <button 
-              key={i} 
-              className="flex flex-col items-center group cursor-pointer"
+              key={i}
               onClick={() => window.location.href = '#onboarding'}
+              className="group relative bg-white rounded-3xl p-6 shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl hover:scale-105 transition-all duration-500 overflow-hidden touch-feedback"
+              style={{ animationDelay: `${i * 100}ms` }}
             >
-              {/* Shield container */}
-              <div className="relative w-full max-w-[280px] transition-transform duration-300 group-hover:scale-110">
-                <div className="absolute inset-0 bg-emerald-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              {/* Gradient background on hover */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+              
+              {/* Image */}
+              <div className="relative z-10 mb-4">
                 <img 
                   src={cat.image} 
                   alt={language === 'fr' ? cat.fr.name : cat.nl.name}
-                  className="relative z-10 w-full h-auto drop-shadow-lg"
+                  className="w-full h-auto max-h-32 object-contain transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-2xl"
                 />
               </div>
               
-              {/* Title below shield */}
-              <div className="text-center mt-5">
-                <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-emerald-700 transition-colors">
+              {/* Content */}
+              <div className="relative z-10 text-center">
+                <h3 className="text-lg font-bold text-slate-900 group-hover:text-white transition-colors duration-300 mb-1">
                   {language === 'fr' ? cat.fr.name : cat.nl.name}
                 </h3>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500 group-hover:text-white/80 transition-colors duration-300">
                   {language === 'fr' ? cat.fr.sub : cat.nl.sub}
                 </p>
+              </div>
+              
+              {/* Arrow indicator */}
+              <div className="absolute bottom-4 right-4 w-10 h-10 bg-slate-100 group-hover:bg-white/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-white" />
               </div>
             </button>
           ))}
         </div>
-      </div>
-
-      {/* Bottom arc divider */}
-      <div className="absolute bottom-0 left-0 right-0 h-12">
-        <svg className="w-full h-full" viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,24 Q720,48 1440,24 L1440,48 L0,48 Z" fill="#FAFAF8" />
-        </svg>
+        
+        {/* CTA below */}
+        <div className="text-center mt-12">
+          <button
+            onClick={() => window.location.href = '#onboarding'}
+            className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 hover:scale-105 transition-all duration-300 shadow-xl shadow-slate-900/20"
+          >
+            <span>{language === 'fr' ? 'Autre problème ?' : 'Ander probleem?'}</span>
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -434,81 +468,76 @@ export function WhyInterventia() {
 }
 
 // ============================================
-// FINAL CTA - Dark emphasis section
+// FINAL CTA - Premium dark section
 // ============================================
 export function FinalCTA() {
   const { language } = useLanguage();
 
   const handleWhatsApp = () => {
-    trackLead({
-      language,
-      pestType: null,
-      contactMethod: 'whatsapp'
-    });
+    trackLead({ language, pestType: null, contactMethod: 'whatsapp' });
     window.open(`https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}`, '_blank');
   };
 
-  const handleCall = () => {
-    trackLead({
-      language,
-      pestType: null,
-      contactMethod: 'phone'
-    });
-    window.location.href = `tel:${PHONE}`;
+  const handleOnboarding = () => {
+    trackLead({ language, pestType: null, contactMethod: 'form' });
+    window.location.href = '#onboarding';
   };
 
   return (
-    <section className="relative bg-slate-800 py-20 overflow-hidden">
-      {/* Blueprint grid overlay */}
-      <div className="absolute inset-0 opacity-[0.08]">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="ctaGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <circle cx="20" cy="20" r="1" fill="#94a3b8"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#ctaGrid)" />
-        </svg>
+    <section className="relative bg-gradient-to-br from-emerald-50 via-white to-blue-50 py-24 overflow-hidden">
+      {/* Animated gradient orbs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
       </div>
 
-      {/* Shield watermark */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03]">
-        <Shield className="w-[600px] h-[600px] text-white" strokeWidth={0.5} />
+      {/* Grid pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px)',
+          backgroundSize: '50px 50px'
+        }} />
       </div>
 
-      <div className="relative w-full max-w-[800px] mx-auto px-6 sm:px-8 lg:px-12 text-center">
-        <h2 className="text-white font-bold tracking-tight mb-4" style={{
-          fontSize: 'clamp(1.75rem, 3vw, 2.5rem)'
-        }}>
-          {language === 'fr' ? 'Besoin d\'une intervention ?' : 'Een interventie nodig?'}
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 border border-emerald-300 rounded-full mb-8 shadow-lg">
+          <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+          <span className="text-sm font-semibold text-emerald-700">
+            {language === 'fr' ? 'Réponse garantie < 30 min' : 'Reactie gegarandeerd < 30 min'}
+          </span>
+        </div>
+        
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-6">
+          {language === 'fr' ? (
+            <>Prêt à <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600">résoudre</span> votre problème ?</>
+          ) : (
+            <>Klaar om uw probleem <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600">op te lossen</span>?</>
+          )}
         </h2>
         
-        <p className="text-slate-300 mb-10 text-lg">
+        <p className="text-lg sm:text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
           {language === 'fr' 
-            ? 'Contactez-nous maintenant pour une réponse rapide et professionnelle.'
-            : 'Contacteer ons nu voor een snelle en professionele reactie.'}
+            ? 'Intervention rapide et discrète. Experts certifiés. Prix transparent.'
+            : 'Snelle en discrete interventie. Gecertificeerde experts. Transparante prijs.'}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
             onClick={handleWhatsApp}
-            className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 bg-[length:200%_100%] hover:bg-right text-white px-12 py-5 font-bold transition-all duration-500 text-lg shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-400/50 rounded-2xl hover:scale-[1.03] overflow-hidden"
+            className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-10 py-5 text-lg font-bold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40 btn-premium"
           >
-            {/* Animated glow ring */}
-            <span className="absolute inset-0 rounded-2xl animate-pulse bg-emerald-400/20"></span>
-            {/* Shimmer */}
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-            <MessageCircle className="w-6 h-6 relative z-10" strokeWidth={2} />
-            <span className="relative z-10">WhatsApp</span>
-            <ArrowRight className="w-6 h-6 relative z-10 transition-transform group-hover:translate-x-2" strokeWidth={2} />
+            <MessageCircle className="w-6 h-6" strokeWidth={2.5} />
+            <span>WhatsApp</span>
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </button>
           
           <button
-            onClick={handleCall}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-slate-300 hover:text-white px-6 py-4 font-medium transition-all duration-200 rounded-xl hover:scale-105"
+            onClick={handleOnboarding}
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white text-slate-900 border-2 border-slate-200 px-10 py-5 text-lg font-bold rounded-2xl transition-all duration-300 hover:bg-slate-50 hover:border-emerald-300 hover:scale-105 shadow-xl"
           >
-            <Phone className="w-5 h-5" strokeWidth={2} />
-            <span>{language === 'fr' ? 'Appeler' : 'Bellen'}</span>
+            <span>{language === 'fr' ? 'Demande gratuite' : 'Gratis aanvraag'}</span>
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </button>
         </div>
       </div>

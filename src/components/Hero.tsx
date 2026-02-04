@@ -1,4 +1,4 @@
-import { MessageCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { MessageCircle, ArrowRight, CheckCircle2, Shield, Sparkles, Zap } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import { trackLead } from '../lib/supabase';
 
@@ -8,183 +8,130 @@ export function Hero() {
   const { language } = useLanguage();
 
   const handleWhatsApp = () => {
-    trackLead({
-      language,
-      pestType: null,
-      contactMethod: 'whatsapp'
-    });
+    trackLead({ language, pestType: null, contactMethod: 'whatsapp' });
     window.open(`https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}`, '_blank');
   };
 
   const handleOnboarding = () => {
-    trackLead({
-      language,
-      pestType: null,
-      contactMethod: 'form'
-    });
-    // Navigate to onboarding flow
+    trackLead({ language, pestType: null, contactMethod: 'form' });
     window.location.href = '#onboarding';
   };
 
   return (
-    <section className="relative bg-[#FAFAF8] overflow-hidden">
-      {/* Blueprint dot grid background */}
-      <div className="absolute inset-0 opacity-[0.05]">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="heroGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <circle cx="20" cy="20" r="1" fill="#475569"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#heroGrid)" />
-        </svg>
+    <section className="relative min-h-screen bg-gradient-to-br from-white via-slate-50 to-emerald-50/30 overflow-hidden">
+      {/* Animated gradient orbs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl" />
+      </div>
+      
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px)',
+          backgroundSize: '60px 60px'
+        }} />
       </div>
 
-      {/* Hero content */}
-      <div className="relative w-full min-h-[90vh] flex items-center pt-20 pb-16">
-        <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      {/* Main content */}
+      <div className="relative z-10 w-full min-h-screen flex items-center">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             
-            {/* Left column - Content */}
-            <div className="lg:col-span-5 flex flex-col justify-center space-y-6 order-2 lg:order-1">
-              {/* Certification badge */}
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-50 to-amber-100/50 border border-amber-200/80 px-4 py-2 w-fit rounded-full shadow-sm animate-fadeInUp">
+            {/* Left content */}
+            <div className="flex-1 text-center lg:text-left space-y-8">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-xl border border-emerald-200 rounded-full shadow-lg animate-slideUpSpring">
                 <div className="relative">
-                  <CheckCircle2 className="w-4 h-4 text-amber-600" strokeWidth={2} />
-                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                 </div>
-                <span className="text-xs font-semibold text-amber-700 tracking-wide uppercase">
-                  {language === 'fr' ? 'Experts certifiés' : 'Gecertificeerde experts'}
+                <span className="text-sm font-semibold text-slate-800">
+                  {language === 'fr' ? 'Experts certifiés • Belgique' : 'Gecertificeerde experts • België'}
                 </span>
               </div>
 
-              <h1 className="text-slate-900 leading-[1.08] font-bold tracking-tight animate-fadeInUp stagger-1" style={{
-                fontSize: 'clamp(2.25rem, 5vw, 3.5rem)'
-              }}>
-                {language === 'fr' 
-                  ? <>Intervention antiparasitaire <span className="gradient-text">rapide</span> et professionnelle</>
-                  : <>Snelle en <span className="gradient-text">professionele</span> ongediertebestrijding</>}
+              {/* Headline */}
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight animate-slideUpSpring" style={{ animationDelay: '0.1s' }}>
+                {language === 'fr' ? (
+                  <>Élimination <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 animate-gradientShift">express</span><br/>des nuisibles</>
+                ) : (
+                  <><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 animate-gradientShift">Snelle</span> verwijdering<br/>van ongedierte</>
+                )}
               </h1>
 
-              <p className="text-slate-600 text-lg leading-relaxed max-w-lg animate-fadeInUp stagger-2">
+              {/* Subheadline */}
+              <p className="text-lg sm:text-xl text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed animate-slideUpSpring" style={{ animationDelay: '0.2s' }}>
                 {language === 'fr' 
-                  ? 'Élimination urgente et discrète des nuisibles partout en Belgique. Réponse garantie sous 24-48h.'
-                  : 'Dringende en discrete verwijdering van ongedierte in heel België. Reactie gegarandeerd binnen 24-48u.'}
+                  ? 'Intervention rapide et discrète partout en Belgique. Réponse garantie sous 30 minutes.'
+                  : 'Snelle en discrete interventie in heel België. Reactie gegarandeerd binnen 30 minuten.'}
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slideUpSpring" style={{ animationDelay: '0.3s' }}>
                 <button
                   onClick={handleWhatsApp}
-                  className="group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-[length:200%_100%] hover:bg-right text-white px-8 py-4 font-semibold transition-all duration-500 shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/40 rounded-2xl hover:scale-[1.03] animate-glow overflow-hidden"
+                  className="group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-5 text-lg font-bold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40 btn-premium"
                 >
-                  {/* Shimmer effect */}
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-                  <MessageCircle className="w-5 h-5 relative z-10" strokeWidth={2} />
+                  <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <MessageCircle className="w-6 h-6 relative z-10" strokeWidth={2.5} />
                   <span className="relative z-10">WhatsApp</span>
-                  <ArrowRight className="w-5 h-5 relative z-10 transition-transform group-hover:translate-x-1" strokeWidth={2} />
+                  <ArrowRight className="w-5 h-5 relative z-10 transition-transform group-hover:translate-x-1" />
                 </button>
                 
                 <button
                   onClick={handleOnboarding}
-                  className="group inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-200 hover:border-emerald-300 px-8 py-4 font-semibold transition-all duration-300 rounded-2xl hover:scale-[1.02] hover:shadow-lg"
+                  className="group inline-flex items-center justify-center gap-3 bg-white text-slate-900 border-2 border-slate-200 px-8 py-5 text-lg font-bold rounded-2xl transition-all duration-300 hover:bg-slate-50 hover:border-emerald-300 hover:scale-105 shadow-xl"
                 >
-                  <span>{language === 'fr' ? 'Demander une intervention' : 'Interventie aanvragen'}</span>
-                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <span>{language === 'fr' ? 'Demande gratuite' : 'Gratis aanvraag'}</span>
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>
 
-              {/* Social proof micro-text */}
-              <div className="flex items-center gap-2 pt-4 opacity-70">
-                <div className="flex -space-x-2">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 border-2 border-white"></div>
-                  <div className="w-6 h-6 rounded-full bg-amber-100 border-2 border-white"></div>
-                  <div className="w-6 h-6 rounded-full bg-blue-100 border-2 border-white"></div>
+              {/* Trust indicators */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4 animate-slideUpSpring" style={{ animationDelay: '0.4s' }}>
+                <div className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-amber-500" />
+                  <span className="text-sm font-medium text-slate-700">{language === 'fr' ? 'Réponse < 30min' : 'Reactie < 30min'}</span>
                 </div>
-                <span className="text-xs text-slate-500">
-                  {language === 'fr' ? '+500 interventions ce mois' : '+500 interventies deze maand'}
-                </span>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  <span className="text-sm font-medium text-slate-700">{language === 'fr' ? 'Prix fixe' : 'Vaste prijs'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  <span className="text-sm font-medium text-slate-700">{language === 'fr' ? 'Garantie résultat' : 'Resultaatgarantie'}</span>
+                </div>
               </div>
             </div>
 
-            {/* Center - Shield illustration with ring geometry */}
-            <div className="lg:col-span-5 lg:col-start-6 flex items-center justify-center order-1 lg:order-2">
-              <div className="relative w-full max-w-[480px]">
-                {/* Concentric rings behind shield */}
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="250" cy="250" r="240" fill="none" stroke="#cbd5e1" strokeWidth="1" opacity="0.3" />
-                  <circle cx="250" cy="250" r="200" fill="none" stroke="#cbd5e1" strokeWidth="1" opacity="0.4" />
-                  <circle cx="250" cy="250" r="160" fill="none" stroke="#059669" strokeWidth="1" opacity="0.2" />
-                  {/* Technical tick marks */}
-                  <line x1="250" y1="5" x2="250" y2="25" stroke="#cbd5e1" strokeWidth="1" opacity="0.4" />
-                  <line x1="495" y1="250" x2="475" y2="250" stroke="#cbd5e1" strokeWidth="1" opacity="0.4" />
-                  <line x1="250" y1="495" x2="250" y2="475" stroke="#cbd5e1" strokeWidth="1" opacity="0.4" />
-                  <line x1="5" y1="250" x2="25" y2="250" stroke="#cbd5e1" strokeWidth="1" opacity="0.4" />
-                </svg>
+            {/* Right - Visual element */}
+            <div className="flex-1 flex items-center justify-center">
+              <div className="relative w-full max-w-md">
+                {/* Glowing rings */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-80 h-80 border border-emerald-200 rounded-full animate-pulse" />
+                  <div className="absolute w-64 h-64 border border-emerald-300 rounded-full" style={{ animation: 'pulse 3s ease-in-out infinite 0.5s' }} />
+                  <div className="absolute w-48 h-48 border border-emerald-400 rounded-full" style={{ animation: 'pulse 3s ease-in-out infinite 1s' }} />
+                </div>
                 
-                {/* Shield illustration */}
-                <img 
-                  src="/src/assets/shields/hero-shield.svg" 
-                  alt="Interventia" 
-                  className="relative z-10 w-full h-auto"
-                />
-              </div>
-            </div>
+                {/* Central shield */}
+                <div className="relative z-10 flex items-center justify-center animate-float">
+                  <div className="w-40 h-40 sm:w-52 sm:h-52 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl shadow-2xl shadow-emerald-500/40 flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                    <Shield className="w-20 h-20 sm:w-28 sm:h-28 text-white" strokeWidth={1.5} />
+                  </div>
+                </div>
 
-            {/* Right column - Trust badges */}
-            <div className="lg:col-span-2 flex flex-row lg:flex-col justify-center gap-4 order-3">
-              <div className="flex items-center gap-3 bg-gradient-to-br from-emerald-50 to-emerald-100/50 border border-emerald-200 shadow-sm hover:shadow-md p-3 rounded-lg transition-all duration-200 hover:scale-105">
-                <div className="bg-white p-2.5 rounded-lg shadow-inner">
-                  <svg className="w-5 h-5 text-emerald-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                    <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
+                {/* Floating badges */}
+                <div className="absolute -top-4 -right-4 bg-white/90 backdrop-blur-xl border border-slate-200 rounded-2xl p-4 shadow-xl animate-float" style={{ animationDelay: '0.5s' }}>
+                  <div className="text-3xl font-black text-slate-900">24h</div>
+                  <div className="text-xs text-slate-600">{language === 'fr' ? 'Intervention' : 'Interventie'}</div>
                 </div>
-                <div className="hidden sm:block">
-                  <div className="font-bold text-slate-900 text-sm">24-48h</div>
-                  <div className="text-xs text-emerald-700">{language === 'fr' ? 'Intervention' : 'Interventie'}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200 shadow-sm hover:shadow-md p-3 rounded-lg transition-all duration-200 hover:scale-105">
-                <div className="bg-white p-2.5 rounded-lg shadow-inner">
-                  <svg className="w-5 h-5 text-amber-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <div className="hidden sm:block">
-                  <div className="font-bold text-slate-900 text-sm">{language === 'fr' ? 'Certifiés' : 'Gecertificeerd'}</div>
-                  <div className="text-xs text-amber-700">{language === 'fr' ? 'Experts' : 'Experts'}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 bg-gradient-to-br from-blue-50 to-blue-100/50 border border-blue-200 shadow-sm hover:shadow-md p-3 rounded-lg transition-all duration-200 hover:scale-105">
-                <div className="bg-white p-2.5 rounded-lg shadow-inner">
-                  <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="2"/>
-                    <path d="M3 10h18" stroke="currentColor" strokeWidth="2"/>
-                    <circle cx="7" cy="15" r="1" fill="currentColor"/>
-                  </svg>
-                </div>
-                <div className="hidden sm:block">
-                  <div className="font-bold text-slate-900 text-sm">{language === 'fr' ? 'Prix fixe' : 'Vaste prijs'}</div>
-                  <div className="text-xs text-blue-700">Transparent</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 bg-gradient-to-br from-teal-50 to-teal-100/50 border border-teal-200 shadow-sm hover:shadow-md p-3 rounded-lg transition-all duration-200 hover:scale-105">
-                <div className="bg-white p-2.5 rounded-lg shadow-inner">
-                  <svg className="w-5 h-5 text-teal-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L4.5 7.5v9L12 22l7.5-5.5v-9L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
-                  </svg>
-                </div>
-                <div className="hidden sm:block">
-                  <div className="font-bold text-slate-900 text-sm">Belgique</div>
-                  <div className="text-xs text-teal-700">{language === 'fr' ? 'Couverture' : 'Dekking'}</div>
+                
+                <div className="absolute -bottom-4 -left-4 bg-white/90 backdrop-blur-xl border border-emerald-200 rounded-2xl p-4 shadow-xl animate-float" style={{ animationDelay: '1s' }}>
+                  <div className="text-3xl font-black text-emerald-600">500+</div>
+                  <div className="text-xs text-slate-600">{language === 'fr' ? 'Ce mois' : 'Deze maand'}</div>
                 </div>
               </div>
             </div>
@@ -192,11 +139,11 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Shield arc divider */}
-      <div className="relative w-full h-16">
-        <svg className="w-full h-full" viewBox="0 0 1440 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,32 Q720,64 1440,32 L1440,64 L0,64 Z" fill="#F5F3EF" />
-          <path d="M0,32 Q720,64 1440,32" fill="none" stroke="#cbd5e1" strokeWidth="1" opacity="0.5" />
+      {/* Wave divider */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <path d="M0 120V60C240 20 480 0 720 20C960 40 1200 80 1440 60V120H0Z" fill="#FAFAF8" />
+          <path d="M0 60C240 20 480 0 720 20C960 40 1200 80 1440 60" stroke="#10b981" strokeWidth="2" opacity="0.2" fill="none" />
         </svg>
       </div>
     </section>
